@@ -1,0 +1,17 @@
+Phing XmlMerge Task
+--------------------------
+A phing task for merging checkstyle XML-files. Append many checkstyle reports to one file.
+
+Installation and Usage
+----------------------------------
+To use the xmlmerge task in your build file, it must be made available to Phing so that the buildfile parser is aware a correlating XML element and it's parameters.  This is done by adding a <taskdef> tak to your build file, something like (see Phing documentation[3] for more information on the <taskdef> task).
+
+  <taskdef name="xmlmerge" classname="XmlMerge" classpath="${project.toolsdir}/phing-xmlmerge" />
+  
+You may append the contents of a file or a checkstyle report as text
+  <xmlmerge source="somefile.xml" dest="a common checkstyle file.xml" />
+  <xmlmerge text="<checkstyle><file=\"somefile\" /></checkstyle>" dest="a common checkstyle file.xml" />
+
+[1] http://www.phing.info/
+[2] http://jenkins-ci.org/
+[3] http://www.phing.info/docs/guide/stable/chapters/appendixes/AppendixB-CoreTasks.html#TaskdefTask
