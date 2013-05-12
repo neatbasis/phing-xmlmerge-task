@@ -45,9 +45,9 @@ class XmlMerge extends Task
      */
     public function main() {
       if(is_null($this->_text))
-      	print("Merging ". $this->_source . " into ".$this->_dest);
+      	$this->log("Merging ". $this->_source . " into ".$this->_dest);
       else
-      	print("Appending to ".$this->_dest);
+      	$this->log("Appending to ".$this->_dest);
       $this->combine();
     }
     
