@@ -2,34 +2,35 @@
 
 require_once "phing/Task.php";
 
-class XmlMerge extends Task {
+class XmlMerge extends Task
+{
 
     /**
      * The message passed in the buildfile.
      */
-    private $source = null;
-    private $dest = null;
-    private $text = null;
+    private $_source = null;
+    private $_dest = null;
+    private $_text = null;
 
     /**
      * The setter for the attribute "source"
      */
     public function setSource($str) {
-        $this->source = $str;
+        $this->_source = $str;
     }
 
     /**
      * The setter for the attribute "dest"
      */
     public function setDest($str) {
-        $this->dest = $str;
+        $this->_dest = $str;
     }
     
      /**
      * The setter for the attribute "text"
      */
     public function setText($str) {
-        $this->text = $str;
+        $this->_text = $str;
     }
     
     /**
@@ -43,44 +44,42 @@ class XmlMerge extends Task {
      * The main entry point method.
      */
     public function main() {
-      if(is_null($this->text))
-      	print("Merging ". $this->source . " into ".$this->dest);
+      if(is_null($this->_text))
+      	print("Merging ". $this->_source . " into ".$this->_dest);
       else
-      	print("Appending to ".$this->dest);
+      	print("Appending to ".$this->_dest);
       $this->combine();
     }
     
     private function combine(){
     	$source = new DOMDocument();
-    	if(is_null($this->text)){
-    		$source->load($this->source);
-    	}else{
-    		$source->loadXML($this->text);
+    	if (is_null($this->_text)) {
+    		$source->load($this->_source);
+    	} else {
+    		$source->loadXML($this->_text);
     	}
 	    
 	    $dest = new DOMDocument();
-	    if(file_exists ($this->dest)){
-	    	$dest->load($this->dest);
+	    if (file_exists($this->_dest)) {
+	    	$dest->load($this->_dest);
 	    	$checkstyle = $dest->getElementsByTagName('checkstyle')->item(0);
-	    }else{
+	    } else {
 	    	$checkstyle = $dest->createElement("checkstyle");
-	    	$dest->appendChild( $checkstyle );
+	    	$dest->appendChild($checkstyle);
 	    }
 	
 	    // iterate over 'item' elements of document 2
-	    $items2 = $source->getElementsByTagName('file');
-	    for ($i = 0; $i < $items2->length; $i ++) {
-	        $item2 = $items2->item($i);
+	    $files = $source->getElementsByTagName('file');
+	    for ($i = 0; $i < $files->length; $i++) {
+	        $item = $files->item($i);
 	
 	        // import/copy item from document 2 to document 1
-	        $item1 = $dest->importNode($item2, true);
+	        $copy = $dest->importNode($item, true);
 	
 	        // append imported item to document 1 'res' element
-	        $checkstyle->appendChild($item1);
+	        $checkstyle->appendChild($copy);
 	
 	    }
-	    $dest->save($this->dest);
+	    $dest->save($this->_dest);
     }
 }
-
-?>
